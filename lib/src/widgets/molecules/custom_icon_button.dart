@@ -11,12 +11,12 @@ const defaultBackgroundColor = Colors.transparent;
 const activeBackgroundColor = Color(0xFF1A2842);
 
 class CustomIconButton extends StatelessWidget {
-  final Widget? icon;
-  final Widget? activeIcon;
-  final Widget? materialIcon;
-  final Widget? materialActiveIcon;
-  final Widget? cupertinoIcon;
-  final Widget? cupertinoActiveIcon;
+  final IconData? icon;
+  final IconData? activeIcon;
+  final IconData? materialIcon;
+  final IconData? materialActiveIcon;
+  final IconData? cupertinoIcon;
+  final IconData? cupertinoActiveIcon;
   final bool isActive;
   const CustomIconButton({
     Key? key,
@@ -45,20 +45,28 @@ class CustomIconButton extends StatelessWidget {
         ),
         child: PlatformIconButton(
           onPressed: () => log('CustomUI info pressed'),
-          color: isActive ? activeIconColor : defaultIconColor,
-          icon: isActive ? activeIcon : icon,
+          icon: isActive ? Icon(activeIcon) : Icon(icon),
           materialIcon: icon == null
               ? isActive
-                  ? materialActiveIcon
-                  : materialIcon
+                  ? Icon(materialActiveIcon)
+                  : Icon(materialIcon)
               : null,
           cupertinoIcon: icon == null
               ? isActive
-                  ? cupertinoActiveIcon
-                  : cupertinoIcon
+                  ? Icon(
+                      cupertinoActiveIcon,
+                      color: activeIconColor,
+                    )
+                  : Icon(
+                      cupertinoIcon,
+                      color: defaultIconColor,
+                    )
               : null,
-          material: (_, __) => MaterialIconButtonData(),
-          cupertino: (_, __) => CupertinoIconButtonData(),
+          material: (_, __) => MaterialIconButtonData(
+            color: isActive ? activeIconColor : defaultIconColor,
+          ),
+          cupertino: (_, __) =>
+              CupertinoIconButtonData(), // color on Cupertino will change the backgroundColor
         ),
       ),
     );

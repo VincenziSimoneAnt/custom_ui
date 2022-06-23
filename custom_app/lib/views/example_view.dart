@@ -104,10 +104,12 @@ class _ExampleViewState extends State<ExampleView> {
             CustomText.caption('Android'),
             Container(
               color: const Color(0xFF1A2842),
-              child: IconButton(
-                color: Colors.orange,
-                onPressed: () => log('info pressed'),
-                icon: const Icon(Icons.info_outline),
+              child: Material(
+                child: IconButton(
+                  color: Colors.orange,
+                  onPressed: () => log('info pressed'),
+                  icon: const Icon(Icons.info_outline),
+                ),
               ),
             ),
             CustomText.caption('Based on platform'),
@@ -120,10 +122,10 @@ class _ExampleViewState extends State<ExampleView> {
             ),
             CustomText.caption('Custom UI based on platform'),
             const CustomIconButton(
-              materialIcon: Icon(Icons.info_outline),
-              materialActiveIcon: Icon(Icons.info),
-              cupertinoIcon: Icon(CupertinoIcons.info_circle),
-              cupertinoActiveIcon: Icon(CupertinoIcons.info_circle_fill),
+              materialIcon: Icons.info_outline,
+              materialActiveIcon: Icons.info,
+              cupertinoIcon: CupertinoIcons.info_circle,
+              cupertinoActiveIcon: CupertinoIcons.info_circle_fill,
             ),
           ],
         ),

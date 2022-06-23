@@ -102,9 +102,19 @@ class _ExampleViewState extends State<ExampleView> {
               ),
             ),
             CustomText.caption('Android'),
-            Container(
-              color: const Color(0xFF1A2842),
-              child: Material(
+            PlatformWidget(
+              cupertino: (_, __) => Material(
+                child: Container(
+                  color: const Color(0xFF1A2842),
+                  child: IconButton(
+                    color: Colors.orange,
+                    onPressed: () => log('info pressed'),
+                    icon: const Icon(Icons.info_outline),
+                  ),
+                ),
+              ),
+              material: (_, __) => Container(
+                color: const Color(0xFF1A2842),
                 child: IconButton(
                   color: Colors.orange,
                   onPressed: () => log('info pressed'),

@@ -104,9 +104,10 @@ class _ExampleViewState extends State<ExampleView> {
             CustomText.caption('Android'),
             Center(
               child: PlatformWidget(
-                cupertino: (_, __) => Material(
-                  child: Container(
-                    color: const Color(0xFF1A2842),
+                cupertino: (_, __) => Container(
+                  color: const Color(0xFF1A2842),
+                  child: Material(
+                    color: Colors.transparent,
                     child: IconButton(
                       color: Colors.orange,
                       onPressed: () => log('info pressed'),

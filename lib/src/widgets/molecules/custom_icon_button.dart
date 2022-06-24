@@ -5,19 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-// Light theme
-const defaultIconColor = Color(0xFF1A2842);
-const activeIconColor = Color(0xFFB0BF22);
-const defaultBackgroundColor = Colors.transparent;
-const activeBackgroundColor = Color(0xFF1A2842);
-
-// Dark theme
-const defaultIconColorDarkMode = Color(0xFFFFFFFF);
-const activeIconColorDarkMode = Color(0xFF1A2842);
-const defaultBackgroundColorDarkMode = Colors.transparent;
-const activeBackgroundColorDarkMode = Color(0xFFB0BF22);
+import '../../shared/app_colors.dart';
 
 class CustomIconButton extends StatefulWidget {
+  final void Function()? onPressed;
   final IconData? icon;
   final IconData? activeIcon;
   final IconData? materialIcon;
@@ -25,10 +16,26 @@ class CustomIconButton extends StatefulWidget {
   final IconData? cupertinoIcon;
   final IconData? cupertinoActiveIcon;
   final EdgeInsets? padding;
-  final bool isActive;
+  final bool isFilled;
+  final bool toggleFilled;
 
-  const CustomIconButton({
+  // const CustomIconButton({
+  //   Key? key,
+  //   required this.onPressed,
+  //   this.icon,
+  //   this.activeIcon,
+  //   this.materialIcon,
+  //   this.materialActiveIcon,
+  //   this.cupertinoIcon,
+  //   this.cupertinoActiveIcon,
+  //   this.padding = const EdgeInsets.all(8.0),
+  //   this.isFilled = false,
+  // })  : toggleFilled = false,
+  //       super(key: key);
+
+  const CustomIconButton.plain({
     Key? key,
+    required this.onPressed,
     this.icon,
     this.activeIcon,
     this.materialIcon,
@@ -36,8 +43,37 @@ class CustomIconButton extends StatefulWidget {
     this.cupertinoIcon,
     this.cupertinoActiveIcon,
     this.padding = const EdgeInsets.all(8.0),
-    this.isActive = true,
-  }) : super(key: key);
+  })  : isFilled = false,
+        toggleFilled = false,
+        super(key: key);
+
+  const CustomIconButton.filled({
+    Key? key,
+    required this.onPressed,
+    this.icon,
+    this.activeIcon,
+    this.materialIcon,
+    this.materialActiveIcon,
+    this.cupertinoIcon,
+    this.cupertinoActiveIcon,
+    this.padding = const EdgeInsets.all(8.0),
+  })  : isFilled = true,
+        toggleFilled = false,
+        super(key: key);
+
+  const CustomIconButton.toggle({
+    Key? key,
+    required this.onPressed,
+    this.icon,
+    this.activeIcon,
+    this.materialIcon,
+    this.materialActiveIcon,
+    this.cupertinoIcon,
+    this.cupertinoActiveIcon,
+    this.padding = const EdgeInsets.all(8.0),
+    this.isFilled = false,
+  })  : toggleFilled = true,
+        super(key: key);
 
   @override
   State<CustomIconButton> createState() => _CustomIconButtonState();
@@ -46,6 +82,7 @@ class CustomIconButton extends StatefulWidget {
 class _CustomIconButtonState extends State<CustomIconButton>
     with WidgetsBindingObserver {
   bool _darkMode = false;
+  bool _showFilled = false;
 
   @override
   void initState() {
@@ -53,6 +90,8 @@ class _CustomIconButtonState extends State<CustomIconButton>
     _darkMode =
         WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
     WidgetsBinding.instance.addObserver(this);
+
+    _showFilled = widget.isFilled;
   }
 
   @override
@@ -71,6 +110,17 @@ class _CustomIconButtonState extends State<CustomIconButton>
     });
   }
 
+  void _onPressed() {
+    if (widget.toggleFilled) {
+      setState(() {
+        _showFilled = !_showFilled;
+      });
+    }
+    if (widget.onPressed != null) {
+      widget.onPressed!();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -78,10 +128,10 @@ class _CustomIconButtonState extends State<CustomIconButton>
         clipBehavior: Clip.hardEdge,
         decoration: ShapeDecoration(
           color: _darkMode
-              ? widget.isActive
+              ? _showFilled
                   ? activeBackgroundColorDarkMode
                   : defaultBackgroundColorDarkMode
-              : widget.isActive
+              : _showFilled
                   ? activeBackgroundColor
                   : defaultBackgroundColor,
           shape: SmoothRectangleBorder(
@@ -92,16 +142,16 @@ class _CustomIconButtonState extends State<CustomIconButton>
           ),
         ),
         child: PlatformIconButton(
-          onPressed: () => log('CustomUI info pressed'),
-          icon: widget.isActive ? Icon(widget.activeIcon) : Icon(widget.icon),
+          onPressed: _onPressed,
+          icon: _showFilled ? Icon(widget.activeIcon) : Icon(widget.icon),
           padding: widget.padding,
           materialIcon: widget.icon == null
-              ? widget.isActive
+              ? _showFilled
                   ? Icon(widget.materialActiveIcon)
                   : Icon(widget.materialIcon)
               : null,
           cupertinoIcon: widget.icon == null
-              ? widget.isActive
+              ? _showFilled
                   ? Icon(
                       widget.cupertinoActiveIcon,
                       color:
@@ -116,10 +166,10 @@ class _CustomIconButtonState extends State<CustomIconButton>
               : null,
           material: (_, __) => MaterialIconButtonData(
             color: _darkMode
-                ? widget.isActive
+                ? _showFilled
                     ? activeIconColorDarkMode
                     : defaultIconColorDarkMode
-                : widget.isActive
+                : _showFilled
                     ? activeIconColor
                     : defaultIconColor,
           ),

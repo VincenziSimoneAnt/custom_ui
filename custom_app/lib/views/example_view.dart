@@ -13,23 +13,35 @@ class ExampleView extends StatefulWidget {
 }
 
 class _ExampleViewState extends State<ExampleView> {
-  var isButtonBusy = false;
+  var _isButtonBusy = false;
+  var _isButtonActive = false;
+  var _isIconButtonActive = false;
 
   @override
   void initState() {
-    isButtonBusy = false;
+    _isButtonBusy = false;
+    _isButtonActive = false;
+    _isIconButtonActive = false;
     super.initState();
+  }
+
+  void _onButtonPressed() {
+    log('CustomUI Button pressed');
+  }
+
+  void _onIconButtonPressed() {
+    log('CustomUI IconButton pressed');
   }
 
   void _onButtonTap() {
     setState(() {
-      isButtonBusy = true;
+      _isButtonBusy = true;
       Future.delayed(
         const Duration(
           seconds: 2,
         ),
         () => setState(() {
-          isButtonBusy = false;
+          _isButtonBusy = false;
         }),
       );
     });
@@ -52,41 +64,159 @@ class _ExampleViewState extends State<ExampleView> {
             horizontal: 16.0,
           ),
           children: [
-            CustomText.headingOne('Design system'),
+            const SizedBox(
+              height: 16.0,
+            ),
+            CustomText.headingOne('Buttons'),
             const Divider(),
-            CustomText.subheading('custom text'),
-            CustomText.body('This is a sample body text.'),
+            // CustomText.subheading('custom text'),
+            // CustomText.body('This is a sample body text.'),
             const SizedBox(
               height: 16.0,
             ),
-            CustomButton(
-              title: 'Primary button',
-              onTap: () => log('Tapped'),
+            CustomText.caption('iOS'),
+            CupertinoButton(
+              onPressed: () => log('Plain iOS button pressed'),
+              padding: const EdgeInsets.all(13.0), // Height 48
+              child: const Text('Plain iOS button'),
             ),
             const SizedBox(
               height: 8.0,
             ),
-            CustomButton(
-              title: 'Future button',
-              busy: isButtonBusy,
-              onTap: _onButtonTap,
+            CupertinoButton.filled(
+              onPressed: () => log('Filled iOS pressed'),
+              padding: const EdgeInsets.all(13.0), // Height 48
+              child: const Text('Filled iOS button'),
             ),
             const SizedBox(
               height: 8.0,
             ),
-            const CustomButton(
-              title: 'Disabled button',
+            // TODO: Add Grey button
+            // TODO: Add Tinted button
+            // * https://developer.apple.com/design/human-interface-guidelines/components/menus-and-actions/buttons#:~:text=what%20it%20does.-,Style,-System%20buttons%20offer
+            // ? Outlined iOS button
+            // DecoratedBox(
+            //   decoration: BoxDecoration(
+            //     border: Border.all(color: Theme.of(context).primaryColor),
+            //     borderRadius: const BorderRadius.all(
+            //         Radius.circular(8.0 * 1.18)), // + 18%
+            //   ),
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(1.0),
+            //     child: CupertinoButton(
+            //       onPressed: () => log('iOS button pressed'),
+            //       padding: const EdgeInsets.all(13.0), // Height 48
+            //       child: const Text('iOS button'),
+            //     ),
+            //   ),
+            // ),
+            CustomText.caption('Android'),
+            TextButton(
+              onPressed: () => log('Text Android button pressed'),
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.all(15.0),
+                ), // Height 48
+              ),
+              //padding: const EdgeInsets.all(12.0),
+              child: const Text('Text Android button'),
             ),
             const SizedBox(
               height: 8.0,
             ),
-            CustomButton.outline(
-              title: 'Outline button',
-              onTap: () => log('Tapped'),
+            OutlinedButton(
+              onPressed: () => log('Outlined Android button pressed'),
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.all(15.0),
+                ), // Height 48
+              ),
+              //padding: const EdgeInsets.all(12.0),
+              child: const Text('Outlined Android button'),
             ),
             const SizedBox(
-              height: 16.0,
+              height: 8.0,
             ),
+            ElevatedButton(
+              onPressed: () => log('Elevated Android button pressed'),
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                  const EdgeInsets.all(15.0),
+                ), // Height 48
+              ),
+              //padding: const EdgeInsets.all(12.0),
+              child: const Text('Elevated Android button'),
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            CustomText.caption('Based on platform'),
+            PlatformWidget(
+              cupertino: (_, __) => CupertinoButton.filled(
+                onPressed: () => log('Filled iOS pressed'),
+                padding: const EdgeInsets.all(13.0), // Height 48
+                child: const Text('Filled iOS button'),
+              ),
+              material: (_, __) => ElevatedButton(
+                onPressed: () => log('Elevated Android button pressed'),
+                style: ButtonStyle(
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    const EdgeInsets.all(15.0),
+                  ), // Height 48
+                ),
+                //padding: const EdgeInsets.all(12.0),
+                child: const Text('Elevated Android button'),
+              ),
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            CustomText.caption('Custom UI based on platform'),
+            CustomButton.plain(
+              onPressed: _onButtonPressed,
+              text: 'Plain button',
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            CustomButton.filled(
+              onPressed: _onButtonPressed,
+              text: 'Primary button',
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            CustomButton.toggle(
+              onPressed: _onButtonPressed,
+              toggleType1: CustomButtonType.filled,
+              text: 'Primary toggle button',
+            ),
+            // const SizedBox(
+            //   height: 8.0,
+            // ),
+            // CustomButton(
+            //   title: 'Future button',
+            //   busy: isButtonBusy,
+            //   onTap: _onButtonTap,
+            // ),
+            // const SizedBox(
+            //   height: 8.0,
+            // ),
+            // const CustomButton(
+            //   title: 'Disabled button',
+            // ),
+            // const SizedBox(
+            //   height: 8.0,
+            // ),
+            // CustomButton.outline(
+            //   title: 'Outline button',
+            //   onTap: () => log('Tapped'),
+            // ),
+            const SizedBox(
+              height: 32.0,
+            ),
+            CustomText.headingOne('Icon buttons'),
+            const Divider(),
             CustomText.caption('iOS'),
             Center(
               child: Container(
@@ -134,11 +264,36 @@ class _ExampleViewState extends State<ExampleView> {
               cupertino: (_, __) => CupertinoIconButtonData(),
             ),
             CustomText.caption('Custom UI based on platform'),
-            const CustomIconButton(
+            CustomIconButton.plain(
+              onPressed: _onIconButtonPressed,
               materialIcon: Icons.info_outline,
               materialActiveIcon: Icons.info,
               cupertinoIcon: CupertinoIcons.info_circle,
               cupertinoActiveIcon: CupertinoIcons.info_circle_fill,
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            CustomIconButton.filled(
+              onPressed: _onIconButtonPressed,
+              materialIcon: Icons.info_outline,
+              materialActiveIcon: Icons.info,
+              cupertinoIcon: CupertinoIcons.info_circle,
+              cupertinoActiveIcon: CupertinoIcons.info_circle_fill,
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            CustomIconButton.toggle(
+              onPressed: _onIconButtonPressed,
+              materialIcon: Icons.info_outline,
+              materialActiveIcon: Icons.info,
+              cupertinoIcon: CupertinoIcons.info_circle,
+              cupertinoActiveIcon: CupertinoIcons.info_circle_fill,
+              isFilled: true,
+            ),
+            const SizedBox(
+              height: 16.0,
             ),
           ],
         ),

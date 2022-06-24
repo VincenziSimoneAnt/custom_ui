@@ -93,32 +93,34 @@ class _ExampleViewState extends State<ExampleView> {
                 color: const Color(0xFF1A2842),
                 child: CupertinoButton(
                   onPressed: () => log('info pressed'),
+                  padding: const EdgeInsets.all(12.0),
                   child: const Icon(
                     CupertinoIcons.info_circle,
                     color: Colors.orange,
-                    //size: 100,
                   ),
                 ),
               ),
             ),
             CustomText.caption('Android'),
-            PlatformWidget(
-              cupertino: (_, __) => Material(
-                child: Container(
+            Center(
+              child: PlatformWidget(
+                cupertino: (_, __) => Material(
+                  child: Container(
+                    color: const Color(0xFF1A2842),
+                    child: IconButton(
+                      color: Colors.orange,
+                      onPressed: () => log('info pressed'),
+                      icon: const Icon(Icons.info_outline),
+                    ),
+                  ),
+                ),
+                material: (_, __) => Container(
                   color: const Color(0xFF1A2842),
                   child: IconButton(
                     color: Colors.orange,
                     onPressed: () => log('info pressed'),
                     icon: const Icon(Icons.info_outline),
                   ),
-                ),
-              ),
-              material: (_, __) => Container(
-                color: const Color(0xFF1A2842),
-                child: IconButton(
-                  color: Colors.orange,
-                  onPressed: () => log('info pressed'),
-                  icon: const Icon(Icons.info_outline),
                 ),
               ),
             ),
